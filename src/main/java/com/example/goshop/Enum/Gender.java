@@ -1,7 +1,7 @@
 package com.example.goshop.Enum;
 
 public enum Gender {
-    Male,
+    MALE,
     FEMALE,
     OTHER
 }
