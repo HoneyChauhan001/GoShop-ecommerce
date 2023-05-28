@@ -15,11 +15,18 @@ public class ItemTransformer {
                 .cart(customer.getCart())
                 .build();
     }
+    public static Item itemRequestDtoToItem(int quantity){
+        return Item.builder()
+                .requiredQuantity(quantity)
+                .build();
+    }
+
 
     public static ItemResponseDto itemToItemResponseDto(Item item){
         return ItemResponseDto.builder()
                 .productName(item.getProduct().getName())
-                .price(item.getProduct().getPrice())
+                .pricePerItem(item.getProduct().getPrice())
+                .itemTotalValue(item.getRequiredQuantity()*item.getProduct().getPrice())
                 .quantity(item.getRequiredQuantity())
                 .build();
     }

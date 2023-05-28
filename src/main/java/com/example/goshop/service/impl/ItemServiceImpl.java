@@ -1,10 +1,7 @@
 package com.example.goshop.service.impl;
 
 import com.example.goshop.dto.requestdto.ItemRequestDto;
-import com.example.goshop.exception.CustomerNotPresentException;
-import com.example.goshop.exception.InSufficientQuantityException;
-import com.example.goshop.exception.OutOfStockException;
-import com.example.goshop.exception.ProductNotPresentException;
+import com.example.goshop.exception.*;
 import com.example.goshop.model.Customer;
 import com.example.goshop.model.Item;
 import com.example.goshop.model.Product;
@@ -24,7 +21,7 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     CustomerRepository customerRepository;
     @Override
-    public Item createItem(ItemRequestDto itemRequestDto) throws ProductNotPresentException, CustomerNotPresentException, OutOfStockException, InSufficientQuantityException {
+    public Item createItem(ItemRequestDto itemRequestDto) throws ProductNotPresentException, OutOfStockException, InSufficientQuantityException, CustomerNotExistException {
         //check product
         Optional<Product> productOpt = productRepository.findById(itemRequestDto.getProductId());
         if(productOpt.isEmpty()){
@@ -34,7 +31,7 @@ public class ItemServiceImpl implements ItemService {
         Customer customer = customerRepository.findByEmailId(itemRequestDto.getCustomerEmailId());
 
         if(customer == null){
-            throw new CustomerNotPresentException("Customer not present");
+            throw new CustomerNotExistException("Customer not present");
         }
 
         Product product = productOpt.get();
@@ -53,5 +50,9 @@ public class ItemServiceImpl implements ItemService {
 
         return item;
 
+    }
+
+    public Item createItem(int quantity){
+        return ItemTransformer.itemRequestDtoToItem(quantity);
     }
 }

@@ -2,10 +2,6 @@ package com.example.goshop.controller;
 
 import com.example.goshop.dto.requestdto.ItemRequestDto;
 import com.example.goshop.dto.responsedto.CartResponseDto;
-import com.example.goshop.exception.CustomerNotPresentException;
-import com.example.goshop.exception.InSufficientQuantityException;
-import com.example.goshop.exception.OutOfStockException;
-import com.example.goshop.exception.ProductNotPresentException;
 import com.example.goshop.model.Item;
 import com.example.goshop.service.CartService;
 import com.example.goshop.service.ItemService;

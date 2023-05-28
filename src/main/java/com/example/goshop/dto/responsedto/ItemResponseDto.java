@@ -11,5 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class ItemResponseDto {
     String productName;
     int quantity;
-    int price;
+    int pricePerItem;
+    int itemTotalValue;
 }
