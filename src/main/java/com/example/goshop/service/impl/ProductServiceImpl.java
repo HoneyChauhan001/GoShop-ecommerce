@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
     @Override
-    public ProductResponseDto addProduct(ProductRequestDto productRequestDto) throws SellerDoesNotExistException {
+    public ProductResponseDto addSeller(ProductRequestDto productRequestDto) throws SellerDoesNotExistException {
         Seller seller = sellerRepository.findByEmailId(productRequestDto.getSellerEmailId());
 
         if(seller == null){

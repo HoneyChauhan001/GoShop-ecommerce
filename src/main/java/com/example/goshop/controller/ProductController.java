@@ -21,7 +21,7 @@ public class ProductController {
     public ResponseEntity addProduct(@RequestBody ProductRequestDto productRequestDto){
 
         try {
-            ProductResponseDto productResponseDto = productService.addProduct(productRequestDto);
+            ProductResponseDto productResponseDto = productService.addSeller(productRequestDto);
             return new ResponseEntity(productResponseDto, HttpStatus.CREATED);
         } catch (SellerDoesNotExistException e) {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

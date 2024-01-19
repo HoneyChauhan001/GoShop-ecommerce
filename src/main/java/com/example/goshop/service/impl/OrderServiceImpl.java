@@ -9,7 +9,6 @@ import com.example.goshop.repository.CardRepository;
 import com.example.goshop.repository.CustomerRepository;
 import com.example.goshop.repository.OrderRepository;
 import com.example.goshop.repository.ProductRepository;
-import com.example.goshop.service.CardService;
 import com.example.goshop.service.ItemService;
 import com.example.goshop.service.OrderService;
 import com.example.goshop.transformer.OrderTransformer;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -27,11 +25,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
+    CardRepository cardRepository;
+    @Autowired
     ItemService itemService;
     @Autowired
     OrderRepository orderRepository;
-    @Autowired
-    CardService cardService;
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto) throws CustomerNotExistException, ProductNotPresentException, OutOfStockException, InSufficientQuantityException, InvalidCardException {
 
@@ -58,11 +56,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //checking card validity
-        Optional<Card> cardOpt = cardService.isCardValid(orderRequestDto.getCardNo(),orderRequestDto.getCvv());
-        if(cardOpt.isEmpty()){
-            throw new InvalidCardException("Invalid card !!");
+        Date date = new Date();
+        Card card = cardRepository.findByCardNo(orderRequestDto.getCardNo());
+        if(card == null || card.getCvv()!=orderRequestDto.getCvv() || date.after(card.getValidTill())){
+            throw new InvalidCardException("Invalid Card");
         }
-        Card card = cardOpt.get();
 
         //decrease product quantity
         int newQuantity = product.getQuantity() - orderRequestDto.getQuantity();
@@ -74,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
         item.setProduct(product);
 
         //OrderRequestDto to entity
-        String maskedCard = cardService.generateMaskedCardNo(card);
+        String maskedCard = generateMaskedCardNo(card);
         OrderEntity orderEntity = OrderTransformer.orderRequestDtoToOrder(item,customer,maskedCard);
         orderEntity.getItems().add(item);
         item.setOrderEntity(orderEntity);
@@ -90,49 +88,16 @@ public class OrderServiceImpl implements OrderService {
         return OrderTransformer.orderToOrderResponseDto(orderEntity);
     }
 
-    @Override
-    public OrderEntity placeOrder(Cart cart, Card card) throws InSufficientQuantityException {
-        //create orderEntity
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setOrderNo(String.valueOf(UUID.randomUUID()));
-        orderEntity.setCardUsed(cardService.generateMaskedCardNo(card));
+    public String generateMaskedCardNo(Card card){
+        String cardNo = card.getCardNo();
+        StringBuilder sb = new StringBuilder();
+        int n = cardNo.length();
 
-        int totalValue = 0;
-        try{
-            for(Item item : cart.getItems()){
-                Product product = item.getProduct();
-                if(item.getRequiredQuantity()>product.getQuantity()){
-                    throw new InSufficientQuantityException("insufficient quantity of product " + product.getName());
-                }
-                totalValue += item.getRequiredQuantity()*product.getPrice();
-                int newQuantity = product.getQuantity()-item.getRequiredQuantity();
-                product.setQuantity(newQuantity);
-                if(product.getQuantity() == 0){
-                    product.setProductStatus(ProductStatus.OUT_OF_STOCK);
-                }
-                item.setOrderEntity(orderEntity);
-            }
-        } catch (InSufficientQuantityException e){
-            for(Item item : cart.getItems()) {
-                if (item.getOrderEntity() != null) {
-                    Product product = item.getProduct();
-                    item.setOrderEntity(null);
-                    int originalQuantity = product.getQuantity() + item.getRequiredQuantity();
-                    product.setQuantity(originalQuantity);
-                    if (originalQuantity > 0) {
-                        product.setProductStatus(ProductStatus.AVAILABLE);
-                    }
-                }
-            }
-            throw e;
+        for(int i=0; i<n-4; i++){
+            sb.append("X");
         }
+        sb.append(cardNo.substring(n-4));
 
-        orderEntity.setTotalValue(totalValue);
-        orderEntity.setItems(cart.getItems());
-        orderEntity.setCustomer(cart.getCustomer());
-
-        return orderEntity;
-
-
+        return sb.toString();
     }
 }

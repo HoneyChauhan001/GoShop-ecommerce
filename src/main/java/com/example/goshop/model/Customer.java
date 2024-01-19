@@ -25,7 +25,7 @@ public class Customer {
     int age;
     @Column(name = "email_id",unique = true,nullable = false)
     String emailId;
-    @Column(name = "mob_no",unique = true,nullable = false,length = 10)
+    @Column(name = "mon_no",unique = true,nullable = false,length = 10)
     String mobNo;
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")

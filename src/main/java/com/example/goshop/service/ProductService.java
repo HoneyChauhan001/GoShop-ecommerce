@@ -8,7 +8,7 @@ import com.example.goshop.exception.SellerDoesNotExistException;
 import java.util.List;
 
 public interface ProductService {
-    public ProductResponseDto addProduct(ProductRequestDto productRequestDto) throws SellerDoesNotExistException;
+    public ProductResponseDto addSeller(ProductRequestDto productRequestDto) throws SellerDoesNotExistException;
 
     public List<ProductResponseDto> getAllProductsByCategoryAndPrice(Category category, int price);
 }
