@@ -1,7 +1,9 @@
 package com.example.goshop.controller;
 
+import com.example.goshop.dto.requestdto.CheckOutRequestDto;
 import com.example.goshop.dto.requestdto.ItemRequestDto;
 import com.example.goshop.dto.responsedto.CartResponseDto;
+import com.example.goshop.dto.responsedto.OrderResponseDto;
 import com.example.goshop.model.Item;
 import com.example.goshop.service.CartService;
 import com.example.goshop.service.ItemService;
@@ -28,6 +30,18 @@ public class CartController {
             CartResponseDto cartResponseDto = cartService.addToCart(item);
             return new ResponseEntity(cartResponseDto, HttpStatus.CREATED);
         } catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/check-out")
+    public ResponseEntity checkOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
+
+        try{
+            OrderResponseDto orderResponseDto = cartService.checkOut(checkOutRequestDto);
+            return new ResponseEntity(orderResponseDto,HttpStatus.CREATED);
+        }
+        catch (Exception e){
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
