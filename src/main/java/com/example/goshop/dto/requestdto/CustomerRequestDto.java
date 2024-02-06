@@ -15,4 +15,5 @@ public class CustomerRequestDto {
     String emailId;
     String mobNo;
     Gender gender;
+    String password;
 }

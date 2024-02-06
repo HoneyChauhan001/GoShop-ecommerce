@@ -3,6 +3,7 @@ package com.example.goshop.transformer;
 import com.example.goshop.dto.requestdto.CustomerRequestDto;
 import com.example.goshop.dto.responsedto.CustomerResponseDto;
 import com.example.goshop.model.Customer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class CustomerTransformer {
 
@@ -13,6 +14,7 @@ public class CustomerTransformer {
                 .emailId(customerRequestDto.getEmailId())
                 .mobNo(customerRequestDto.getMobNo())
                 .gender(customerRequestDto.getGender())
+                .password(new BCryptPasswordEncoder().encode(customerRequestDto.getPassword()))
                 .build();
     }
 

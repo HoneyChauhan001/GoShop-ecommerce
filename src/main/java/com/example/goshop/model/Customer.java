@@ -1,6 +1,7 @@
 package com.example.goshop.model;
 
 import com.example.goshop.Enum.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +31,8 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     Gender gender;
+    @Column(name = "password") @JsonIgnore
+    String password;
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     List<Card> cards = new ArrayList<>();
     @OneToOne(mappedBy = "customer",cascade = CascadeType.ALL)

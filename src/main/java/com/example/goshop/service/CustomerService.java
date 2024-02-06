@@ -6,4 +6,6 @@ import com.example.goshop.exception.EmailOrMobNoAlreadyExistException;
 
 public interface CustomerService {
     public CustomerResponseDto addCustomer(CustomerRequestDto customerRequestDto) throws EmailOrMobNoAlreadyExistException;
+
+    CustomerResponseDto getCustomer(String name);
 }

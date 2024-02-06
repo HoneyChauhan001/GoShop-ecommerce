@@ -39,4 +39,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     }
+
+    @Override
+    public CustomerResponseDto getCustomer(String emailId) {
+        Customer customer = customerRepository.findByEmailId(emailId);
+        return CustomerTransformer.customerToCustomerResponseDto(customer);
+    }
 }
