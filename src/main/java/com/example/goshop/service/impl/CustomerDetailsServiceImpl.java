@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomerDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //Write Logic to get the user from the DB
         Customer user = customerRepository.findFirstByEmailId(email);
         if(user == null){
-            throw new UsernameNotFoundException("User not found",null);
+            throw new UsernameNotFoundException("Customer not found",null);
         }
         return new org.springframework.security.core.userdetails.User(user.getEmailId(), user.getPassword(), new ArrayList<>());
     }

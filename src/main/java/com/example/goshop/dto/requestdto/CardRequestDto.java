@@ -13,7 +13,6 @@ import java.sql.Date;
 @Builder
 public class CardRequestDto {
 
-    String customerEmailId;
     String cardNo;
     int cvv;
     CardType cardType;

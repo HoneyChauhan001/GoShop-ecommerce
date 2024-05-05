@@ -25,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         private AuthenticationManager authenticationManager;
 
         @Autowired
-        private UserDetailsServiceImpl userDetailsService;
+        private CustomerDetailsServiceImpl userDetailsService;
 
         @Override
         public AuthenticationResponseDTO createJWTToken(AuthenticationDTO authenticationDTO) throws UsernameNotFoundException, IOException, WrongCredentialsException, UserIsDisabledException {
@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(), authenticationDTO.getPassword()));
                 final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDTO.getEmail());
                 final String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
-                return new AuthenticationResponseDTO(jwt);
+                return new AuthenticationResponseDTO(jwt,userDetails.getUsername());
             }
             catch (BadCredentialsException e){
                 throw new WrongCredentialsException("Username or Password Incorrect");

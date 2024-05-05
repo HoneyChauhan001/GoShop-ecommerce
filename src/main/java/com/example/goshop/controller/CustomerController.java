@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     @Autowired
     CustomerService customerService;
-    @PostMapping("/add")
+    @PostMapping("/sign-up")
     public ResponseEntity addCustomer(@RequestBody CustomerRequestDto customerRequestDto){
         try{
             CustomerResponseDto customerResponseDto = customerService.addCustomer(customerRequestDto);
@@ -28,9 +28,18 @@ public class CustomerController {
 
     @GetMapping("/get")
     public ResponseEntity getCustomer(Authentication authentication){
-        CustomerResponseDto customerResponseDto = customerService.getCustomer(authentication.getName());
-        return new ResponseEntity(customerResponseDto,HttpStatus.OK);
+        Customer customer = customerService.getCustomer(authentication.getName());
+        return new ResponseEntity(customer,HttpStatus.OK);
+    }
 
+    @PostMapping("/updateCustomer")
+    public ResponseEntity updateCustomer(@RequestBody CustomerRequestDto customerRequestDto, Authentication authentication){
+        String customerEmail = authentication.getName();
+        try {
+            return new ResponseEntity(customerService.updateCustomer(customerEmail,customerRequestDto),HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

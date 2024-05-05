@@ -1,6 +1,6 @@
 package com.example.goshop.config;
 
-import com.example.goshop.service.impl.UserDetailsServiceImpl;
+import com.example.goshop.service.impl.CustomerDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private CustomerDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -26,6 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
+        System.out.println(request.getRequestURI());
         String token = null;
         String username = null;
 

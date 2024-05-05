@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthenticationResponseDTO {
     private String jwtToken;
+    private String emailId;
 }

@@ -1,5 +1,6 @@
 package com.example.goshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,8 @@ public class Seller {
     String name;
     @Column(name = "email_id",unique = true,nullable = false)
     String emailId;
+    @Column(name = "password") @JsonIgnore
+    String password;
     @Column(name = "mon_no",unique = true,nullable = false,length = 10)
     String mobNo;
     @OneToMany(mappedBy = "seller",cascade = CascadeType.ALL)

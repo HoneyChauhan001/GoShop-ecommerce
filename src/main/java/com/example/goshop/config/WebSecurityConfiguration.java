@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class WebSecurityConfiguration {
+public class WebSecurityConfiguration{
     @Autowired
     private JwtRequestFilter requestFilter;
 
@@ -25,7 +25,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/authenticate", "/sign-up","/customer/add").permitAll()
+                .requestMatchers("/authenticate", "/sign-up","/customer/sign-up","/swagger-ui/*","/v3/api-docs/swagger-config","/v3/api-docs").permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .sessionManagement()
